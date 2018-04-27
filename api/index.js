@@ -14,13 +14,13 @@ function log (level, message) {
 
 async function getUserInfo (token) {
   try {
-    log('info', `Retrieving user info from ${config.graph_user_info_url}`)
+    log('info', `Retrieving user info from ${config.metadata.userinfo_endpoint}`)
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     const { data } = await axios(config.metadata.userinfo_endpoint)
     return data
   } catch (error) {
-    console.log(error.response.data)
-    throw error.response ? new Error(error.response.data) : error
+    log('error', error.response ? JSON.stringify(error.response.data, null, 2) : error)
+    throw error
   }
 }
 
@@ -41,7 +41,8 @@ async function getToken (code) {
     log('info', `Got token from ${config.metadata.token_endpoint}`)
     return data
   } catch (error) {
-    throw error.response ? new Error(error.response.data) : error
+    log('error', error.response ? JSON.stringify(error.response.data, null, 2) : error)
+    throw error
   }
 }
 
@@ -60,13 +61,13 @@ exports.setup = async () => {
 exports.login = (req, res) => {
   const params = stringify(config.auth)
   log('info', `Authorizing through ${config.metadata.authorization_endpoint}`)
-  redirect(res, `${config.metadata.authorization_endpoint}?${params}`)
+  return redirect(res, `${config.metadata.authorization_endpoint}?${params}`)
 }
 
 exports.logout = (req, res) => {
   const params = stringify({ post_logout_redirect_uri: config.domain })
   log('info', `Logging out through ${config.metadata.end_session_endpoint}`)
-  redirect(res, `${config.metadata.end_session_endpoint}?${params}`)
+  return redirect(res, `${config.metadata.end_session_endpoint}?${params}`)
 }
 
 exports.callback = async (req, res) => {
