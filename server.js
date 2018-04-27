@@ -50,7 +50,7 @@ const server = micro(async (req, res) => {
 app.prepare().then(() => {
   server.listen(port, err => {
     if (err) throw err
-    setup()
+    if (!serverRuntimeConfig.DEMO) setup()
     console.log(`> Ready on http://localhost:${port}`)
   })
 })
