@@ -18,6 +18,11 @@ export default ({ user = false }) => (
     { user
       ? <ul className='right'>
         <li>
+          <a href='/hjelp'>
+            Hjelp
+          </a>
+        </li>
+        <li>
           <a href='/api/logout'>
             Logg ut
           </a>
@@ -30,17 +35,6 @@ export default ({ user = false }) => (
     <style jsx>{`
       img {
         width: 36px;
-      }
-      .menu {
-        border-bottom: 1px solid #d6d6d6;
-        line-height: 50px;
-        width: 100%;
-        text-align: left;
-        min-width: 190px;
-      }
-      .menu:hover, .menu:hover a {
-        background: ${COLORS.secondary};
-        color: ${COLORS.secondaryOpposite};
       }
       nav {
         grid-area: header;
@@ -67,7 +61,7 @@ export default ({ user = false }) => (
         justify-content: flex-end;
       }
       li {
-        font-size: large;
+        text-transform: uppercase;
         margin: 10px;
         align-self: center;
       }

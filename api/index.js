@@ -20,7 +20,7 @@ async function getUserInfo (token) {
     return data
   } catch (error) {
     console.log(error.response.data)
-    throw error.response ? error.response.data : error
+    throw error.response ? new Error(error.response.data) : error
   }
 }
 
@@ -41,7 +41,7 @@ async function getToken (code) {
     log('info', `Got token from ${config.metadata.token_endpoint}`)
     return data
   } catch (error) {
-    throw error.response ? error.response.data : error
+    throw error.response ? new Error(error.response.data) : error
   }
 }
 
@@ -73,7 +73,7 @@ exports.callback = async (req, res) => {
   const { query } = urlParse(req.url, true)
   log('info', `Recivied callback data`)
   if (query.state !== config.auth.state) {
-    throw Error('Failed to login - Invalid state')
+    throw new Error('Failed to login - Invalid state')
   }
   log('info', `Validated token`)
   try {

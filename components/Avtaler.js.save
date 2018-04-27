@@ -28,7 +28,7 @@ const Avtale = ({ data }) => (
       <h4>{data.title}</h4>
       <p className='description'>
         {data.description}
-        { data.sign && <i style={{ color: '#ff6c6c' }}><br /><br />Denne avtalen må signeres</i> }
+       
       </p>
       <Icon name={data.icon} style={{ color: '#49ca4d' }} />
       <style jsx>
