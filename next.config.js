@@ -1,5 +1,5 @@
 const uuid = require('uuid/v4')
-const { version, now: { alias } } = require('./package.json')
+const { version } = require('./package.json')
 
 // Basic config
 const config = {
@@ -10,7 +10,7 @@ const config = {
 }
 
 module.exports = {
-  serverRuntimeConfig: {  // Will only be available on the server side
+  serverRuntimeConfig: { // Will only be available on the server side
     DEMO: process.env.DEMO || false,
     SESSION_KEY: process.env.SESSION_KEY || 'Louie Louie, oh no, I got to go Louie Louie, oh no, I got to go',
     debug: true,
