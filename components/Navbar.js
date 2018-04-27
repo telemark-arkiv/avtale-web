@@ -1,14 +1,6 @@
 import getConfig from 'next/config'
 const { publicRuntimeConfig: { COMPANY, APP, COLORS } } = getConfig()
 
-const menuLinks = [
-  {
-    href: '/api/logout',
-    icon: 'account_circle',
-    name: 'Logg ut'
-  }
-]
-
 export default ({ user = false }) => (
   <nav>
     <ul className='left'>
@@ -26,7 +18,9 @@ export default ({ user = false }) => (
     { user
       ? <ul className='right'>
         <li>
-          { user.pid }
+          <a href='/api/logout'>
+            Logg ut
+          </a>
         </li>
       </ul>
       : <ul className='right'>
