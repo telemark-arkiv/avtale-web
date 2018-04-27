@@ -3,7 +3,9 @@ const { stringify } = require('querystring')
 const { parse: urlParse } = require('url')
 const redirect = (res, location, statusCode = 302) => { res.statusCode = statusCode; res.setHeader('Location', location); res.end() }
 const pkg = require('../package.json')
-let { serverRuntimeConfig: config } = require('../next.config')
+const { serverRuntimeConfig: config } = require('../next.config')
+const uuid = require('uuid/v4')
+let states = []
 
 function log (level, message) {
   if (config.debug) {
@@ -33,9 +35,10 @@ async function getToken (code) {
     client_secret: config.client_secret,
     grant_type: config.grant_type
   })
-
+  const auth = Buffer.from(`${config.auth.client_id}:${config.client_secret}`).toString('base64')
+  axios.defaults.headers.common['Authorization'] = `Basic ${auth}`
   log('info', `Retriving token from ${config.metadata.token_endpoint}`)
-
+  console.log(payload)
   try {
     const { data } = await axios.post(config.metadata.token_endpoint, payload)
     log('info', `Got token from ${config.metadata.token_endpoint}`)
@@ -59,7 +62,10 @@ exports.setup = async () => {
 }
 
 exports.login = (req, res) => {
-  const params = stringify(config.auth)
+  const state = uuid()
+  const nonce = uuid()
+  states.push(state)
+  const params = stringify(Object.assign(config.auth, { state: state, nonce: nonce }))
   log('info', `Authorizing through ${config.metadata.authorization_endpoint}`)
   return redirect(res, `${config.metadata.authorization_endpoint}?${params}`)
 }
@@ -73,12 +79,12 @@ exports.logout = (req, res) => {
 exports.callback = async (req, res) => {
   const { query } = urlParse(req.url, true)
   log('info', `Recivied callback data`)
-  if (query.state !== config.auth.state) {
+  if (!states.includes(query.state)) {
     throw new Error('Failed to login - Invalid state')
   }
+  states.splice(states.indexOf(query.state), 1)
   log('info', `Validated token`)
   try {
-    log('info', `Retrieving graph api token`)
     const token = await getToken(query.code)
     const userProfile = await getUserInfo(token.access_token)
     return userProfile
