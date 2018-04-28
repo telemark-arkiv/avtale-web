@@ -41,6 +41,7 @@
     "next": "5.1.0",
     "react": "16.3.2",
     "react-dom": "16.3.2",
+    "react-pdf": "^3.0.4",
     "uuid": "3.2.1"
   },
   "devDependencies": {
@@ -58,5 +59,10 @@
       "node": "10.0.0"
     }
   },
-  "dotenv": "production.env"
+  "dotenv": "production.env",
+  "standard": {
+    "ignore": [
+      "/static/*.js"
+    ]
+  }
 }
