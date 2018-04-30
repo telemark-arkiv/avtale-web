@@ -110,11 +110,11 @@ const SignertAvtale = ({ data }) => (
   </Box>
 )
 
-const HeaderButtons = ({ action }) => (
+const HeaderButtons = ({ action, choosen }) => (
   <div className='nav'>
-    <a onClick={() => action(false)} className='checked'>Alle</a>
-    <a onClick={() => action('unsigned')}>Usignerte</a>
-    <a onClick={() => action('signed')}>Signerte</a>
+    <a onClick={() => action(false)} className={ !choosen && 'checked' }>Alle</a>
+    <a onClick={() => action('unsigned')} className={ choosen === 'unsigned' && 'checked' }>Usignerte</a>
+    <a onClick={() => action('signed')} className={ choosen == 'signed' && 'checked' }>Signerte</a>
     <style jsx>
       {`
         .nav a {
@@ -208,7 +208,7 @@ export default class extends Component {
     const category = this.state.category
     return (
       <Fragment>
-        <HeaderButtons action={this.filterCategory} />
+        <HeaderButtons action={this.filterCategory} choosen={category} />
         { !category && <Fragment><Usignert avtaler={usignert} /><Signert avtaler={signert} /></Fragment> }
         { category === 'unsigned' && <Usignert avtaler={usignert} /> }
         { category === 'signed' && <Signert avtaler={signert} /> }
