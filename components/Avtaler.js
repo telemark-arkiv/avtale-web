@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, Component } from 'react'
 import { Icon, Box } from './styles'
 import Link from 'next/link'
 
@@ -110,11 +110,11 @@ const SignertAvtale = ({ data }) => (
   </Box>
 )
 
-const HeaderButtons = () => (
+const HeaderButtons = ({ action }) => (
   <div className='nav'>
-    <Link href=''><a className='checked'>Alle</a></Link>
-    <Link href=''><a>Usignerte</a></Link>
-    <Link href=''><a>Signerte</a></Link>
+    <a onClick={() => action(false)} className='checked'>Alle</a>
+    <a onClick={() => action('unsigned')}>Usignerte</a>
+    <a onClick={() => action('signed')}>Signerte</a>
     <style jsx>
       {`
         .nav a {
@@ -149,7 +149,7 @@ const Signert = ({ avtaler }) => {
   if (!avtaler) return ''
   return (
     <Fragment>
-      <Title data='Signerte kontrakter' />
+      <Title data='Signerte avtaler' />
       <div className='avtale-wrapper'>
         {avtaler.map((item, index) => <SignertAvtale key={index} data={item} />)}
       </div>
@@ -171,7 +171,7 @@ const Usignert = ({ avtaler }) => {
   if (!avtaler) return ''
   return (
     <Fragment>
-      <Title data='Signerte kontrakter' />
+      <Title data='Usignerte avtaler' />
       <div className='avtale-wrapper'>
         {avtaler.map((item, index) => <UsignertAvtale key={index} data={item} />)}
       </div>
@@ -189,14 +189,30 @@ const Usignert = ({ avtaler }) => {
   )
 }
 
-export default () => {
-  const signert = avtaler.filter(item => item.signed)
-  const usignert = avtaler.filter(item => !item.signed)
-  return (
-    <Fragment>
-      <HeaderButtons />
-      <Usignert avtaler={usignert} />
-      <Signert avtaler={signert} />
-    </Fragment>
-  )
+export default class extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      category: false
+    }
+    this.filterCategory = this.filterCategory.bind(this)
+  }
+
+  filterCategory (name) {
+    this.setState({ category: name })
+  }
+
+  render () {
+    const signert = avtaler.filter(item => item.signed)
+    const usignert = avtaler.filter(item => !item.signed)
+    const category = this.state.category
+    return (
+      <Fragment>
+        <HeaderButtons action={this.filterCategory} />
+        { !category && <Fragment><Usignert avtaler={usignert} /><Signert avtaler={signert} /></Fragment> }
+        { category === 'unsigned' && <Usignert avtaler={usignert} /> }
+        { category === 'signed' && <Signert avtaler={signert} /> }
+      </Fragment>
+    )
+  }
 }
