@@ -43,9 +43,10 @@ const server = micro(async (req, res) => {
     } catch (error) {
       throw error
     }
-  } else if (pathname === '/api/agreements') {
-    if (!req.session || !req.session.data || !req.session.data.pid) throw new Error('Not logged in')
-    const agreements = await getAgreements(req.session.data.pid)
+  } else if (pathname.includes('/api/agreements')) {
+    /* TODO: Trenger JWT-håndtering */
+    const id = pathname.replace('/api/agreements/')
+    const agreements = await getAgreements(id)
     return agreements
   } else {
     return handle(req, res)
