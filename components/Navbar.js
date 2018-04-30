@@ -7,12 +7,16 @@ export default ({ user = false }) => (
     <ul className='left'>
       <li>
         <Link href='/'>
-          <img className='logo' alt={COMPANY.name} src={COMPANY.logo} />
+          <a>
+            <img className='logo' alt={COMPANY.name} src={COMPANY.logo} />
+          </a>
         </Link>
       </li>
       <li>
         <Link href='/'>
-          <span className='app-name'>{APP.name}</span>
+          <a>
+            <span className='app-name'>{APP.name}</span>
+          </a>
         </Link>
       </li>
     </ul>
@@ -20,12 +24,12 @@ export default ({ user = false }) => (
       ? <ul className='right'>
         <li>
           <Link prefetch href='/hjelp'>
-            Hjelp
+            <a>Hjelp</a>
           </Link>
         </li>
         <li>
           <Link href='/api/logout'>
-            Logg ut
+            <a>Logg ut</a>
           </Link>
         </li>
       </ul>
