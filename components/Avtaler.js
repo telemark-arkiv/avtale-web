@@ -112,9 +112,9 @@ const SignertAvtale = ({ data }) => (
 
 const HeaderButtons = ({ action, choosen }) => (
   <div className='nav'>
-    <a onClick={() => action(false)} className={ !choosen && 'checked' }>Alle</a>
-    <a onClick={() => action('unsigned')} className={ choosen === 'unsigned' && 'checked' }>Usignerte</a>
-    <a onClick={() => action('signed')} className={ choosen == 'signed' && 'checked' }>Signerte</a>
+    <a onClick={() => action(false)} className={!choosen && 'checked'}>Alle</a>
+    <a onClick={() => action('unsigned')} className={choosen === 'unsigned' && 'checked'}>Usignerte</a>
+    <a onClick={() => action('signed')} className={choosen === 'signed' && 'checked'}>Signerte</a>
     <style jsx>
       {`
         .nav a {
