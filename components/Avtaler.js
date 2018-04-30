@@ -2,48 +2,6 @@ import { Fragment } from 'react'
 import { Icon, Box } from './styles'
 import Link from 'next/link'
 
-const Title = ({ data }) => (
-  <h1 style={{ fontFamily: 'Oswald', color: 'rgb(158, 158, 158)', fontSize: '30px', fontWeight: '300' }}>
-    { data }
-  </h1>
-)
-
-const Signert = () => (
-  <span className='signert'>
-    <Icon name='done' style={{ color: '#49ca4d', verticalAlign: 'middle', fontSize: '20px' }} /> Signert
-    <style jsx>
-      {`
-        .signert {
-          float: left;
-          color: #999;
-          font-size: 12px;
-          line-height: 24px;
-          text-transform: uppercase;
-          font-family: 'Open Sans', 'sans';
-        }
-      `}
-    </style>
-  </span>
-)
-
-const Usignert = () => (
-  <span className='usignert'>
-    <Icon name='clear' style={{ color: '#ff6c6c', verticalAlign: 'middle', fontSize: '20px' }} /> Ikke signert
-    <style jsx>
-      {`
-        .usignert {
-          float: left;
-          color: #999;
-          font-size: 12px;
-          line-height: 24px;
-          text-transform: uppercase;
-          font-family: 'Open Sans', 'sans';
-        }
-      `}
-    </style>
-  </span>
-)
-
 const avtaler = [
   {
     title: 'Elev-PC kontrakt',
@@ -77,25 +35,76 @@ const avtaler = [
   }
 ]
 
-const Avtale = ({ data }) => (
+const Title = ({ data }) => (
+  <h1 style={{ fontFamily: 'Oswald', color: 'rgb(158, 158, 158)', fontSize: '30px', fontWeight: '300' }}>
+    { data }
+  </h1>
+)
+
+const SignertLabel = () => (
+  <span className='signert'>
+    <Icon name='done' style={{ color: '#49ca4d', verticalAlign: 'middle', fontSize: '20px' }} /> Signert
+    <style jsx>
+      {`
+        .signert {
+          float: left;
+          color: #999;
+          font-size: 12px;
+          line-height: 24px;
+          text-transform: uppercase;
+          font-family: 'Open Sans', 'sans';
+        }
+      `}
+    </style>
+  </span>
+)
+
+const UsignertLabel = () => (
+  <span className='usignert'>
+    <Icon name='clear' style={{ color: '#ff6c6c', verticalAlign: 'middle', fontSize: '20px' }} /> Ikke signert
+    <style jsx>
+      {`
+        .usignert {
+          float: left;
+          color: #999;
+          font-size: 12px;
+          line-height: 24px;
+          text-transform: uppercase;
+          font-family: 'Open Sans', 'sans';
+        }
+      `}
+    </style>
+  </span>
+)
+
+const UsignertAvtale = ({ data }) => (
   <Box>
     <Link href={data.href}>
       <a>
-        { data.signed ? <Signert /> : <Usignert /> }
+        <UsignertLabel />
         <h4 style={{ marginRight: '70px' }}>{data.title}</h4>
-        { !data.signed &&
         <p className='description'>
           {data.description}
         </p>
-        }
         <style jsx>
           {`
-        .description {
-          color: #999;
-          font-size: 13px;
-        }
+          .description {
+            color: #999;
+            font-size: 13px;
+          }
       `}
         </style>
+      </a>
+    </Link>
+  </Box>
+)
+
+const SignertAvtale = ({ data }) => (
+  <Box>
+    <Link href={data.href}>
+      <a>
+        <SignertLabel />
+        <h4 style={{ marginRight: '70px' }}>{data.title}</h4>
       </a>
     </Link>
   </Box>
@@ -136,26 +145,58 @@ const HeaderButtons = () => (
   </div>
 )
 
-export default () => (
-  <Fragment>
-    <HeaderButtons />
-    <Title data='Usignerte kontrakter' />
-    <div className='avtale-wrapper'>
-      {avtaler.filter(item => !item.signed).map((item, index) => <Avtale key={index} data={item} />)}
-    </div>
-    <Title data='Signerte kontrakter' />
-    <div className='avtale-wrapper'>
-      {avtaler.filter(item => item.signed).map((item, index) => <Avtale key={index} data={item} />)}
-    </div>
-    <style jsx>
-      {`
-        .avtale-wrapper {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-          grid-column-gap: 14px;
-          grid-row-gap: 14px;
-        }
-      `}
-    </style>
-  </Fragment>
-)
+const Signert = ({ avtaler }) => {
+  if (!avtaler) return ''
+  return (
+    <Fragment>
+      <Title data='Signerte kontrakter' />
+      <div className='avtale-wrapper'>
+        {avtaler.map((item, index) => <SignertAvtale key={index} data={item} />)}
+      </div>
+      <style jsx>
+        {`
+          .avtale-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-column-gap: 14px;
+            grid-row-gap: 14px;
+          }
+        `}
+      </style>
+    </Fragment>
+  )
+}
+
+const Usignert = ({ avtaler }) => {
+  if (!avtaler) return ''
+  return (
+    <Fragment>
+      <Title data='Signerte kontrakter' />
+      <div className='avtale-wrapper'>
+        {avtaler.map((item, index) => <UsignertAvtale key={index} data={item} />)}
+      </div>
+      <style jsx>
+        {`
+          .avtale-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-column-gap: 14px;
+            grid-row-gap: 14px;
+          }
+        `}
+      </style>
+    </Fragment>
+  )
+}
+
+export default () => {
+  const signert = avtaler.filter(item => item.signed)
+  const usignert = avtaler.filter(item => !item.signed)
+  return (
+    <Fragment>
+      <HeaderButtons />
+      <Usignert avtaler={usignert} />
+      <Signert avtaler={signert} />
+    </Fragment>
+  )
+}

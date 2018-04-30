@@ -2,7 +2,7 @@ const { version } = require('./package.json')
 
 // Basic config
 const config = {
-  domain: process.env.IDP_DOMAIN || 'https://avtaler.t-fk.no', // URL to your app
+  domain: process.env.IDP_DOMAIN || 'http://localhost:3000', // URL to your app
   oidcUrl: process.env.IDP_OIDC_URL || 'https://oidc.difi.no', // Base URL to OIDC-server
   client_id: process.env.IDP_CLIENT_ID || 'client_id', // // Klientens tildelte id
   client_secret: process.env.IDP_CLIENT_SECRET || 'client_secret' // Klientens tildelte secret
@@ -12,6 +12,8 @@ module.exports = {
   serverRuntimeConfig: { // Will only be available on the server side
     DEMO: process.env.DEMO || false,
     SESSION_KEY: process.env.SESSION_KEY || 'Louie Louie, oh no, I got to go Louie Louie, oh no, I got to go',
+    AGREEMENTS_API: process.env.AGREEMENTS_API || 'https://log.avtale.tjeneste.win/agreements/search',
+    AGREEMENTS_API_JWT: process.env.AGREEMENTS_API_JWT || 'Louie Louie, oh no, I got to go Louie Louie, oh no, I got to go',
     debug: true,
     domain: config.domain,
     autodiscover_url: config.oidcUrl + '/.well-known/openid-configuration',
@@ -28,6 +30,7 @@ module.exports = {
     }
   },
   publicRuntimeConfig: { // Will be available on both server and client
+    domain: config.domain,
     APP: {
       name: process.env.APP_NAME || 'Avtaler',
       version

@@ -7,6 +7,7 @@ const { serverRuntimeConfig } = require('./next.config')
 const micro = require('micro')
 const { parse: urlParse } = require('url')
 const { setup, login, callback, logout } = require('./api')
+const { getAgreements } = require('./api/agreements')
 const redirect = (res, location, statusCode = 302) => { res.statusCode = statusCode; res.setHeader('Location', location); res.end() }
 const session = require('micro-cookie-session')({
   name: 'session',
@@ -42,6 +43,10 @@ const server = micro(async (req, res) => {
     } catch (error) {
       throw error
     }
+  } else if (pathname === '/api/agreements') {
+    if (!req.session || !req.session.data || !req.session.data.pid) throw new Error('Not logged in')
+    const agreements = await getAgreements(req.session.data.pid)
+    return agreements
   } else {
     return handle(req, res)
   }
