@@ -1,35 +1,36 @@
 import getConfig from 'next/config'
+import Link from 'next/link'
 const { publicRuntimeConfig: { COMPANY, APP, COLORS } } = getConfig()
 
 export default ({ user = false }) => (
   <nav>
     <ul className='left'>
       <li>
-        <a href='/'>
+        <Link href='/'>
           <img className='logo' alt={COMPANY.name} src={COMPANY.logo} />
-        </a>
+        </Link>
       </li>
       <li>
-        <a href='/'>
+        <Link href='/'>
           <span className='app-name'>{APP.name}</span>
-        </a>
+        </Link>
       </li>
     </ul>
     { user
       ? <ul className='right'>
         <li>
-          <a href='/hjelp'>
+          <Link prefetch href='/hjelp'>
             Hjelp
-          </a>
+          </Link>
         </li>
         <li>
-          <a href='/api/logout'>
+          <Link href='/api/logout'>
             Logg ut
-          </a>
+          </Link>
         </li>
       </ul>
       : <ul className='right'>
-        <li><a href='/api/login'>Logg inn</a></li>
+        <li><Link href='/api/login'>Logg inn</Link></li>
       </ul>
     }
     <style jsx>{`

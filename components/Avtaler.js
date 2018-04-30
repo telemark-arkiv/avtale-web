@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 import { Icon, Box } from './styles'
+import Link from 'next/link'
 
 const Title = ({ data }) => (
   <h1 style={{ fontFamily: 'Oswald', color: 'rgb(158, 158, 158)', fontSize: '30px', fontWeight: '300' }}>
@@ -78,28 +79,66 @@ const avtaler = [
 
 const Avtale = ({ data }) => (
   <Box>
-    <a href={data.href}>
-      { data.signed ? <Signert /> : <Usignert /> }
-      <h4>{data.title}</h4>
-      { !data.signed &&
+    <Link href={data.href}>
+      <a>
+        { data.signed ? <Signert /> : <Usignert /> }
+        <h4 style={{ marginRight: '70px' }}>{data.title}</h4>
+        { !data.signed &&
         <p className='description'>
           {data.description}
         </p>
-      }
-      <style jsx>
-        {`
+        }
+        <style jsx>
+          {`
         .description {
           color: #999;
           font-size: 13px;
         }
       `}
-      </style>
-    </a>
+        </style>
+      </a>
+    </Link>
   </Box>
+)
+
+const HeaderButtons = () => (
+  <div className='nav'>
+    <Link href=''><a className='checked'>Alle</a></Link>
+    <Link href=''><a>Usignerte</a></Link>
+    <Link href=''><a>Signerte</a></Link>
+    <style jsx>
+      {`
+        .nav a {
+          background: white;
+          margin-right: 10px;
+          margin-bottom: 10px;
+          color: #333333;
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+          border-radius: 2px;
+          min-width: 90px;
+          padding: 0 12px;
+          cursor: pointer;
+          display: inline-block;
+          line-height: 36px;
+          outline: none;
+          text-transform: uppercase;
+          -webkit-transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), -webkit-box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1);
+          transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), -webkit-box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1);
+          transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), -webkit-box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1);
+        }
+        .checked {
+          background: #6ac4ae !important;
+          color: white !important;
+        }
+      `}
+    </style>
+  </div>
 )
 
 export default () => (
   <Fragment>
+    <HeaderButtons />
     <Title data='Usignerte kontrakter' />
     <div className='avtale-wrapper'>
       {avtaler.filter(item => !item.signed).map((item, index) => <Avtale key={index} data={item} />)}
