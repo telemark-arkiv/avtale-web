@@ -26,16 +26,16 @@ export default ({ user, query }) => (
     </Box>
     <style jsx>
       {`
-      .description {
-        color: #999;
-        font-size: 13px;
-      }
-     .avtale-wrapper {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(1fr, 1fr));
-        grid-column-gap: 14px;
-        grid-row-gap: 14px;
-      }
+        .description {
+          color: #999;
+          font-size: 13px;
+        }
+        .avtale-wrapper {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(1fr, 1fr));
+          grid-column-gap: 14px;
+          grid-row-gap: 14px;
+        }
     `}
     </style>
   </div>

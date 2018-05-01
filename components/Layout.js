@@ -40,7 +40,7 @@ export default ({ children }) => (
           font-size: 20px;
           line-height: 1;
           font-weight: 400;
-          font-family: Arial, sans-serif;
+          // font-family: Arial, sans-serif;
           margin: 0;
         }
         a {

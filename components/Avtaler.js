@@ -1,120 +1,13 @@
 import { Fragment, Component } from 'react'
-import { Icon, Box } from './styles'
+import { Box, Title, Label } from './styles'
 import Link from 'next/link'
+import avtaler from '../test/dummy-avtaler'
 
-const avtaler = [
-  {
-    title: 'Elev-PC kontrakt',
-    signed: true,
-    href: '/avtale?id=1',
-    description: 'Leieforholdet mellom Telemark fylkeskommune og eleven er regulert av vilkårene i denne avtalen.'
-  },
-  {
-    title: 'IT-reglement',
-    signed: false,
-    href: '/avtale?id=2',
-    description: 'Telemark fylkeskommune har retningslinjer for bruk av digitale hjelpemidler, e-post og internett. Disse gjelder for ansatte, elever, konsulenter og andre som får tilgang til fylkeskommunens systemer og utstyr.'
-  },
-  {
-    title: 'IT-reglement',
-    signed: false,
-    href: '/avtale?id=2',
-    description: 'Telemark fylkeskommune har retningslinjer for bruk av digitale hjelpemidler, e-post og internett. Disse gjelder for ansatte, elever, konsulenter og andre som får tilgang til fylkeskommunens systemer og utstyr.'
-  },
-  {
-    title: 'IT-reglement',
-    signed: false,
-    href: '/avtale?id=2',
-    description: 'Telemark fylkeskommune har retningslinjer for bruk av digitale hjelpemidler, e-post og internett. Disse gjelder for ansatte, elever, konsulenter og andre som får tilgang til fylkeskommunens systemer og utstyr.'
-  },
-  {
-    title: 'Lån av lærebøker og andre læremidler',
-    signed: true,
-    href: '/avtale?id=3',
-    description: 'Formålet med avtalen er å formalisere låneforholdet av bøker, lærebøker og andre læremidler mellom Telemark fylkeskommune og eleven. Avtaleperiodene løper fra avtaleinngåelse og så lenge eleven er elev ved den aktuelle skolen, eller at alle lån er tilbakelevert.'
-  }
-]
-
-const Title = ({ data }) => (
-  <h1 style={{ fontFamily: 'Oswald', color: 'rgb(158, 158, 158)', fontSize: '30px', fontWeight: '300' }}>
-    { data }
-  </h1>
-)
-
-const SignertLabel = () => (
-  <span className='signert'>
-    <Icon name='done' style={{ color: '#49ca4d', verticalAlign: 'middle', fontSize: '20px' }} /> Signert
-    <style jsx>
-      {`
-        .signert {
-          float: left;
-          color: #999;
-          font-size: 12px;
-          line-height: 24px;
-          text-transform: uppercase;
-          font-family: 'Open Sans', 'sans';
-        }
-      `}
-    </style>
-  </span>
-)
-
-const UsignertLabel = () => (
-  <span className='usignert'>
-    <Icon name='clear' style={{ color: '#ff6c6c', verticalAlign: 'middle', fontSize: '20px' }} /> Ikke signert
-    <style jsx>
-      {`
-        .usignert {
-          float: left;
-          color: #999;
-          font-size: 12px;
-          line-height: 24px;
-          text-transform: uppercase;
-          font-family: 'Open Sans', 'sans';
-        }
-      `}
-    </style>
-  </span>
-)
-
-const UsignertAvtale = ({ data }) => (
-  <Box>
-    <Link href={data.href}>
-      <a>
-        <UsignertLabel />
-        <h4 style={{ marginRight: '70px' }}>{data.title}</h4>
-        <p className='description'>
-          {data.description}
-        </p>
-        <style jsx>
-          {`
-          .description {
-            color: #999;
-            font-size: 13px;
-          }
-      `}
-        </style>
-      </a>
-    </Link>
-  </Box>
-)
-
-const SignertAvtale = ({ data }) => (
-  <Box>
-    <Link href={data.href}>
-      <a>
-        <SignertLabel />
-        <h4 style={{ marginRight: '70px' }}>{data.title}</h4>
-      </a>
-    </Link>
-  </Box>
-)
-
-const HeaderButtons = ({ action, choosen }) => (
+const HeaderButtons = ({ filterCategory, choosen }) => (
   <div className='nav'>
-    <a onClick={() => action(false)} className={!choosen && 'checked'}>Alle</a>
-    <a onClick={() => action('unsigned')} className={choosen === 'unsigned' && 'checked'}>Usignerte</a>
-    <a onClick={() => action('signed')} className={choosen === 'signed' && 'checked'}>Signerte</a>
+    <a onClick={() => filterCategory(false)} className={!choosen && 'checked'}>Alle</a>
+    <a onClick={() => filterCategory('unsigned')} className={choosen === 'unsigned' && 'checked'}>Usignerte</a>
+    <a onClick={() => filterCategory('signed')} className={choosen === 'signed' && 'checked'}>Signerte</a>
     <style jsx>
       {`
         .nav a {
@@ -145,11 +38,44 @@ const HeaderButtons = ({ action, choosen }) => (
   </div>
 )
 
-const Signert = ({ avtaler }) => {
+const UsignertAvtale = ({ data }) => (
+  <Box>
+    <Link href={data.href}>
+      <a>
+        <Label icon='clear' iconColor='#ff6c6c'>Signert</Label>
+        <h4 style={{ marginRight: '70px' }}>{data.title}</h4>
+        <p className='description'>
+          {data.description}
+        </p>
+        <style jsx>
+          {`
+          .description {
+            color: #999;
+            font-size: 13px;
+          }
+      `}
+        </style>
+      </a>
+    </Link>
+  </Box>
+)
+
+const SignertAvtale = ({ data }) => (
+  <Box>
+    <Link href={data.href}>
+      <a>
+        <Label icon='done' iconColor='#49ca4d'>Signert</Label>
+        <h4 style={{ marginRight: '70px' }}>{data.title}</h4>
+      </a>
+    </Link>
+  </Box>
+)
+
+const SignerteAvtaler = ({ avtaler }) => {
   if (!avtaler) return ''
   return (
     <Fragment>
-      <Title data='Signerte avtaler' />
+      <Title>Signerte avtaler</Title>
       <div className='avtale-wrapper'>
         {avtaler.map((item, index) => <SignertAvtale key={index} data={item} />)}
       </div>
@@ -167,11 +93,11 @@ const Signert = ({ avtaler }) => {
   )
 }
 
-const Usignert = ({ avtaler }) => {
+const UsignerteAvtaler = ({ avtaler }) => {
   if (!avtaler) return ''
   return (
     <Fragment>
-      <Title data='Usignerte avtaler' />
+      <Title>Usignerte avtaler</Title>
       <div className='avtale-wrapper'>
         {avtaler.map((item, index) => <UsignertAvtale key={index} data={item} />)}
       </div>
@@ -208,10 +134,10 @@ export default class extends Component {
     const category = this.state.category
     return (
       <Fragment>
-        <HeaderButtons action={this.filterCategory} choosen={category} />
-        { !category && <Fragment><Usignert avtaler={usignert} /><Signert avtaler={signert} /></Fragment> }
-        { category === 'unsigned' && <Usignert avtaler={usignert} /> }
-        { category === 'signed' && <Signert avtaler={signert} /> }
+        <HeaderButtons filterCategory={this.filterCategory} choosen={category} />
+        { !category && <Fragment><UsignerteAvtaler avtaler={usignert} /><SignerteAvtaler avtaler={signert} /></Fragment> }
+        { category === 'unsigned' && <UsignerteAvtaler avtaler={usignert} /> }
+        { category === 'signed' && <SignerteAvtaler avtaler={signert} /> }
       </Fragment>
     )
   }
