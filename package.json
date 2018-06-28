@@ -43,7 +43,7 @@
     "react": "16.4.1",
     "react-dom": "16.4.1",
     "react-pdf": "3.0.5",
-    "uuid": "3.2.1"
+    "uuid": "3.3.2"
   },
   "devDependencies": {
     "ava": "0.25.0",
