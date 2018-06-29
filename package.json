@@ -39,7 +39,7 @@
     "jsonwebtoken": "8.3.0",
     "micro": "9.3.2",
     "micro-cookie-session": "2.0.0-beta.1",
-    "next": "6.0.3",
+    "next": "6.1.1",
     "react": "16.4.1",
     "react-dom": "16.4.1",
     "react-pdf": "3.0.5",
